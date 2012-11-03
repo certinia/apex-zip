@@ -1,0 +1,61 @@
+<!--
+/**
+ * Copyright (c) 2012, FinancialForce.com, inc
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, 
+ *   are permitted provided that the following conditions are met:
+ *
+ * - Redistributions of source code must retain the above copyright notice, 
+ *      this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright notice, 
+ *      this list of conditions and the following disclaimer in the documentation 
+ *      and/or other materials provided with the distribution.
+ * - Neither the name of the FinancialForce.com, inc nor the names of its contributors 
+ *      may be used to endorse or promote products derived from this software without 
+ *      specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+ *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL 
+ *  THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**/ 
+ -->
+<apex:page controller="ImportStaticResourceController" sidebar="false">
+	<style>
+		pre {
+		 white-space: pre-wrap;       /* css-3 */
+		 white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+		 white-space: -pre-wrap;      /* Opera 4-6 */
+		 white-space: -o-pre-wrap;    /* Opera 7 */
+		 word-wrap: break-word;       /* Internet Explorer 5.5+ */
+		}	
+	</style>
+	<apex:sectionHeader title="Unzip Example" subtitle="File Unzip via Static Resource" />
+	<apex:form id="form" enctype="multipart/form-data">
+		<apex:pageMessages />
+		<apex:actionPoller action="{!checkAsyncRequest}" interval="5" rerender="form" rendered="{!NOT(ISNULL(AsyncResult))}"/>
+		<apex:pageBlock title="Office Open File" rendered="{!AND(ISNULL(AsyncResult),ISNULL(UnzippedFile))}">
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!upload}" value="Upload and Unzip" />
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection showHeader="false" columns="2">
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="File" for="file" />
+					<apex:inputFile value="{!content}" id="file" />
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		<apex:pageBlock id="files" title="Office Open File - /word/document.xml" rendered="{!NOT(ISNULL(UnzippedFile))}">
+           <apex:pageBlockSection columns="1">
+           		<apex:pageBlockSectionItem >
+                        <apex:outputLabel ><pre>{!UnzippedFile}</pre></apex:outputLabel>                  		
+           		</apex:pageBlockSectionItem>
+           </apex:pageBlockSection>		
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
