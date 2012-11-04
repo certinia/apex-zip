@@ -4,20 +4,12 @@ Apex Zip Support
 Background
 -----------
 
+I recently found a number of developers asking questions about Zip file handling in Apex, which as most find out pretty soon, does not exist. Statement governor concerns aside, nor is there any binary data types to make implementing support for it possible. Most understandably most want to stay on platform and not call out to some external service for this. And rightly so!
 
 Strategies
 ----------
 
-
-Problems and Solutions
-----------------------
-
-Links
------
-
-
-Examples
---------
+I've started to describe the strategies demonstrated in this repo in a series of blogs, the first of which is [here](http://andrewfawcett.wordpress.com/2012/11/04/handling-office-files-and-zip-files-in-apex-part-1/).
 
 About the Author
 ----------------
