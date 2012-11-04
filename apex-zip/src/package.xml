@@ -3,6 +3,7 @@
     <types>
         <members>ImportStaticResourceController</members>
         <members>MetadataService</members>
+        <members>SpreadsheetUpdateDemoController</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -13,6 +14,7 @@
     </types>
     <types>
         <members>importstaticresource</members>
+        <members>spreadsheetupdatedemo</members>
         <name>ApexPage</name>
     </types>
     <types>
