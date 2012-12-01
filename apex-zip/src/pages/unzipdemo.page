@@ -23,28 +23,18 @@
  *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**/
--->
-<apex:component >
-	<apex:attribute name="oncomplete" type="string" description="Javascript executed once all files have been zipped"/>
-	<apex:attribute name="name" type="string" description="Name of the Javascript function generated to zip files"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-load.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-deflate.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-inflate.js')}"/>
-	<script>
-		// Create JSZip instance to receive files
-		// TODO: Need to scope these global var's by component name 
-		zipFile = new JSZip();
-	</script>
-	<apex:componentBody /> <!--  Output children, typically <c:zipEntry> components -->
-	<script>
-		// Function to be called from the page to start the zip generation process
-		function {!Name}Generate()
-		{
-			// Execute given Javascript to handle completion of zip generation 
-			var data = zipFile.generate();
-			eval('{!oncomplete}');
-		}
-	</script>
-</apex:component>
+**/ 
+ -->
+<apex:page controller="UnzipDemoController">
+	<apex:form id="form">
+		<apex:actionFunction name="unzipped" action="{!unzipped}" rerender="form">
+			<apex:param name="state" assignTo="{!unzippedState}" value=""/>
+		</apex:actionFunction>
+		<apex:pageblock title="Select a Zip File">
+			<apex:pageblocksection >
+				<c:unzipfile name="somezipfile" oncomplete="unzipped(state);"
+					onreceive="{!$RemoteAction.UnzipDemoController.receiveZipFileEntry}" />
+			</apex:pageblocksection>
+		</apex:pageblock>
+	</apex:form>
+</apex:page>

@@ -27,7 +27,7 @@
 -->
 <apex:component >
 	<apex:attribute name="path" type="string" description="Path to entry in the zip file"/>
-	<apex:attribute name="data" type="string" description="File data"/>
+	<apex:attribute name="data" type="string" description="File data" default=""/>
 	<script>
 		zipFile.file('{!path}', '{!JSENCODE(data)}');
 	</script>

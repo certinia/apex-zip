@@ -23,28 +23,23 @@
  *  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-**/
--->
+**/ 
+ -->
 <apex:component >
-	<apex:attribute name="oncomplete" type="string" description="Javascript executed once all files have been zipped"/>
-	<apex:attribute name="name" type="string" description="Name of the Javascript function generated to zip files"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-load.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-deflate.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-inflate.js')}"/>
+	<apex:attribute name="name" type="string" description="Name of the Javascript function generated to unzip files"/>
+	<apex:attribute name="state" type="string" description="Value passed to the JavaScript Remoting action calls as each file is unzipped."/>
+	<apex:attribute name="getzipfileentry" type="string" description="Name of a JavaScript Remoting action retrieve a given zip file entry."/>
+	<apex:attribute name="oncomplete" type="string" description="JavaScript executed when the zip file generation is complete."/>
+	<c:zip name="zip{!name}" oncomplete="{!oncomplete}">		
+		<apex:componentBody /> <!--  Output children, typically <c:zipEntry> components -->
+	</c:zip>
 	<script>
-		// Create JSZip instance to receive files
-		// TODO: Need to scope these global var's by component name 
-		zipFile = new JSZip();
-	</script>
-	<apex:componentBody /> <!--  Output children, typically <c:zipEntry> components -->
-	<script>
-		// Function to be called from the page to start the zip generation process
 		function {!Name}Generate()
 		{
-			// Execute given Javascript to handle completion of zip generation 
-			var data = zipFile.generate();
-			eval('{!oncomplete}');
+			// Call 'getzipfileentry' JavaScript Remoting for each entry in turn
+			// ... 
+			// Call zip{!Name}Generate to finally generate, passing zip data via call to 'oncomplete' handler
+			// ...
 		}
 	</script>
 </apex:component>

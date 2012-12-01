@@ -1,4 +1,3 @@
-<!--
 /**
  * Copyright (c) 2012, FinancialForce.com, inc
  * All rights reserved.
@@ -24,27 +23,37 @@
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
--->
-<apex:component >
-	<apex:attribute name="oncomplete" type="string" description="Javascript executed once all files have been zipped"/>
-	<apex:attribute name="name" type="string" description="Name of the Javascript function generated to zip files"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-load.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-deflate.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-inflate.js')}"/>
-	<script>
-		// Create JSZip instance to receive files
-		// TODO: Need to scope these global var's by component name 
-		zipFile = new JSZip();
-	</script>
-	<apex:componentBody /> <!--  Output children, typically <c:zipEntry> components -->
-	<script>
-		// Function to be called from the page to start the zip generation process
-		function {!Name}Generate()
-		{
-			// Execute given Javascript to handle completion of zip generation 
-			var data = zipFile.generate();
-			eval('{!oncomplete}');
-		}
-	</script>
-</apex:component>
+
+/**
+ * Demonstrates how to use the <c:zipfile> component
+ **/
+public with sharing class ZipDemoController
+{
+	// Zip file paths
+	public List<String> paths {get;set;}
+	
+	// Generated zip file data (see receiveZipFile)
+	public transient String zipFileData {get;set;}
+	
+	public ZipDemoController(ApexPages.StandardController controlelr)
+	{
+		// TODO: Retrieve Attachment names for this example
+		paths = new List<String> { 'filea.txt' };
+	}
+	
+	public PageReference receiveZipFile()
+	{
+		// Receive the generated zip file and store it (in this case as a Document) 
+		Document document = new Document();
+		document.Body = Blob.valueOf(zipFileData);
+		insert document;
+		return new PageReference('/'+document.Id);
+	}
+	
+	@RemoteAction
+	public static String getZipFileEntry(String state, String path)
+	{
+		// Retrieve / calculate the data for each file path to be added to the zip
+		return null;
+	}	
+}

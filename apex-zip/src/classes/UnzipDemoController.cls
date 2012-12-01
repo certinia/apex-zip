@@ -1,4 +1,3 @@
-<!--
 /**
  * Copyright (c) 2012, FinancialForce.com, inc
  * All rights reserved.
@@ -24,27 +23,43 @@
  *  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
--->
-<apex:component >
-	<apex:attribute name="oncomplete" type="string" description="Javascript executed once all files have been zipped"/>
-	<apex:attribute name="name" type="string" description="Name of the Javascript function generated to zip files"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-load.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-deflate.js')}"/>
-	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-inflate.js')}"/>
-	<script>
-		// Create JSZip instance to receive files
-		// TODO: Need to scope these global var's by component name 
-		zipFile = new JSZip();
-	</script>
-	<apex:componentBody /> <!--  Output children, typically <c:zipEntry> components -->
-	<script>
-		// Function to be called from the page to start the zip generation process
-		function {!Name}Generate()
+
+/**
+ * Demonstrates how to use the <c:unzipfile> component
+ **/
+public with sharing class UnzipDemoController 
+{
+	// Unzipped component state, in this case the Id of the ZipFile__c record
+	public String unzippedState {get;set;}
+	
+	// Action Function method called by client code once all entries have been unzipped
+	public PageReference unzipped()
+	{
+		// Redirect to ZipFile record
+		return new PageReference('/' + unzippedState);	
+	}
+		
+	@RemoteAction
+	// JavaScript Remoting method called as each item is unzipped from the file
+	public static String receiveZipFileEntry(String filename, String path, String data, String state)
+	{
+		// First file?
+		if(state=='')
 		{
-			// Execute given Javascript to handle completion of zip generation 
-			var data = zipFile.generate();
-			eval('{!oncomplete}');
+			// Create a record to store unzipped files as attachments
+			ZipFile__c zipFile = new ZipFile__c();
+			zipFile.Name = filename;
+			insert zipFile;
+			state = zipFile.Id;
 		}
-	</script>
-</apex:component>
+		
+		// Attach unzipped file
+		Attachment attachment = new Attachment();
+		attachment.Body = Blob.valueOf(data);
+		attachment.Name = path;
+		attachment.ParentId = state;
+		insert attachment;
+		
+		return state;		
+	}	
+}

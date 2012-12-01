@@ -28,21 +28,38 @@
 <apex:component >
 	<apex:attribute name="oncomplete" type="string" description="Javascript executed on unzip of file entry"/>
 	<apex:attribute name="name" type="string" description="Name of the Javascript function generated to unzip files"/>
+	<apex:attribute name="state" type="string" description="Some initial state to pass into the execution chain as files are unzipped"/>
 	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-load.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-deflate.js')}"/>
 	<apex:includeScript value="{!URLFOR($Resource.jszip, '/jszip-inflate.js')}"/>
-	<script>    
-		// Unzip and push zip entries onto list for processing
+	<script>
+		// Unzip component client side state 
+		// TODO: Need to scope these global var's by component name
 	    var zipData = '<apex:componentBody />';
-	    var zip = new JSZip(zipData, {base64:true});
-	    var zipFileNames = [];
-	    for(var zipfileName in zip.files)
-	        zipFileNames.push(zipfileName);	        
-	    // Start sending the files
-	    {!name}();                     
-		// Function to be called from the page to unzip the next file	    
-	    function {!name}()
+	    var zip = null;
+		var zipFileName = null; 
+	    var zipFileNames = null;
+
+		// Start unzipping based on given data?    
+	    if(zipData.lenght>0)
+	    	{!name}Start('', zipData);
+	    	
+	   	// Function to be called to start unzipping the process
+		function {!name}Start(filename, data)
+		{
+			// Unzip and push zip entries onto list for processing
+ 		    zip = new JSZip(data, {base64:true});
+ 		    zipFileName = filename;
+		    zipFileNames = [];
+		    for(var zipfileName in zip.files)
+		        zipFileNames.push(zipfileName);	        
+		    // Start sending the files
+		    {!name}Next('{!state}');
+		}
+		                     
+		// Function to be called to unzip the next file and call back via the 'oncomplete' handler	    
+	    function {!name}Next(state)
 	    {                 
 	        var fileName = null;
 	        var file = null;
@@ -62,6 +79,7 @@
 	        var more = file!=null ? true : false;
 	        var path = more ? fileName : null;
 	        var data = more ? file.data : null;
+	        var filename = zipFileName;
 	        eval('{!oncomplete}');
 	    }           
 	</script>
