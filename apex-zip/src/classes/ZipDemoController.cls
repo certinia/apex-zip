@@ -35,25 +35,40 @@ public with sharing class ZipDemoController
 	// Generated zip file data (see receiveZipFile)
 	public transient String zipFileData {get;set;}
 	
-	public ZipDemoController(ApexPages.StandardController controlelr)
+	private ApexPages.StandardController controller;
+	
+	public ZipDemoController(ApexPages.StandardController controller)
 	{
-		// TODO: Retrieve Attachment names for this example
-		paths = new List<String> { 'filea.txt' };
+		this.controller = controller;
+		
+		// Info message to ask the user to wait (no real time progress messages yet)
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Info, 
+			'Zip processing for the attacments has started please wait, you will be redirected to the resulting Document once this is completed.'));
+				
+		// Use Attachment names as zip entry path names for this example
+		List<Attachment> attachments = [select Name from Attachment where ParentId =: controller.getId()];
+		paths = new List<String>();
+		for(Attachment attachment : attachments)
+			paths.add(attachment.Name);			
 	}
 	
 	public PageReference receiveZipFile()
 	{
-		// Receive the generated zip file and store it (in this case as a Document) 
+		// Receive the generated zip file and store it (in this case as a Document)
+		ZipFile__c zipFile = [select Name from ZipFile__c where Id =: controller.getId()]; 
 		Document document = new Document();
-		document.Body = Blob.valueOf(zipFileData);
+		document.Name = zipFile.Name;
+		document.FolderId = UserInfo.getUserId();
+		document.Body = EncodingUtil.base64Decode(zipFileData);
 		insert document;
 		return new PageReference('/'+document.Id);
 	}
 	
 	@RemoteAction
-	public static String getZipFileEntry(String state, String path)
+	public static String getZipFileEntry(String path, String state)
 	{
-		// Retrieve / calculate the data for each file path to be added to the zip
-		return null;
+		// Retrieve or generate the Base64 encoded data for each file path to be added to the zip
+		Attachment attachment = [select Name, Body from Attachment where ParentId =:state and Name =:path];
+		return EncodingUtil.base64Encode(attachment.body);
 	}	
 }

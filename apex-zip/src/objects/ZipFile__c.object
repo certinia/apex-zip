@@ -50,4 +50,15 @@
     <pluralLabel>Zip Files</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
+    <webLinks>
+        <fullName>Zip</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Zip</masterLabel>
+        <openType>sidebar</openType>
+        <page>zipdemo</page>
+        <protected>false</protected>
+    </webLinks>
 </CustomObject>

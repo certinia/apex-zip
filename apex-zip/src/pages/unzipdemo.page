@@ -31,6 +31,7 @@
 			<apex:param name="state" assignTo="{!unzippedState}" value=""/>
 		</apex:actionFunction>
 		<apex:pageblock title="Select a Zip File">
+			<apex:pageMessages />
 			<apex:pageblocksection >
 				<c:unzipfile name="somezipfile" oncomplete="unzipped(state);"
 					onreceive="{!$RemoteAction.UnzipDemoController.receiveZipFileEntry}" />

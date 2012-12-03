@@ -11,13 +11,12 @@
         <members>unzip</members>
         <members>unzipfile</members>
         <members>zip</members>
-        <members>zipEntry</members>
+        <members>zipentry</members>
         <members>zipfile</members>
         <name>ApexComponent</name>
     </types>
     <types>
         <members>importstaticresource</members>
-        <members>spreadsheetupdatedemo</members>
         <members>unzipdemo</members>
         <members>zipdemo</members>
         <name>ApexPage</name>

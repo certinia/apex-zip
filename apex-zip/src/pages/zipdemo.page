@@ -30,15 +30,18 @@
 		<apex:actionFunction name="receiveZip" action="{!receiveZipFile}" rerender="form">
 			<apex:param name="zipdata" assignTo="{!zipFileData}" value="0"/>
 		</apex:actionFunction>
+		<apex:pageblock title="Select a Zip File">
+			<apex:pageMessages />
+			<c:zipfile name="someZipfile" state="{!ZipFile__c.Id}" oncomplete="receiveZip(data);"
+				getzipfileentry="{!$RemoteAction.ZipDemoController.getZipFileEntry}">
+				<apex:repeat value="{!paths}" var="path">
+					<c:zipentry path="{!path}" base64="true"/>
+				</apex:repeat>
+			</c:zipfile>
+			<script>
+				// Start zip file generation
+				someZipfileGenerate();
+			</script>
+		</apex:pageblock>
 	</apex:form>		
-	<c:zipfile name="somezipfile" state="{!ZipFile__c.Id}" oncomplete="receiveZip(data);"
-		getzipfileentry="{!$RemoteAction.ZipDemoController.getZipFileEntry}">
-		<apex:repeat value="{!paths}" var="path">
-			<c:zipEntry path="{!path}"/>
-		</apex:repeat>
-	</c:zipfile>
-	<script>
-		// Start zip file generation on page load
-		somezipfileGenerate();
-	</script>
 </apex:page>

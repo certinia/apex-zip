@@ -32,6 +32,12 @@ public with sharing class UnzipDemoController
 	// Unzipped component state, in this case the Id of the ZipFile__c record
 	public String unzippedState {get;set;}
 	
+	public UnzipDemoController()
+	{
+		ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Info, 
+			'Unzip processing will start once the file is selected, please wait to be redirected to the results after this.'));
+	}
+	
 	// Action Function method called by client code once all entries have been unzipped
 	public PageReference unzipped()
 	{
