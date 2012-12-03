@@ -36,51 +36,51 @@
 	<script>
 		// Unzip component client side state 
 		// TODO: Need to scope these global var's by component name
-	    var zipData = '<apex:componentBody />';
-	    var zip = null;
+		var zipData = '<apex:componentBody />';
+		var zip = null;
 		var zipFileName = null; 
-	    var zipFileNames = null;
+		var zipFileNames = null;
 
 		// Start unzipping based on given data?    
-	    if(zipData.lenght>0)
-	    	{!name}Start('', zipData);
-	    	
-	   	// Function to be called to start unzipping the process
+		if(zipData.lenght>0)
+			{!name}Start('', zipData);
+
+		// Function to be called to start unzipping the process
 		function {!name}Start(filename, data)
 		{
 			// Unzip and push zip entries onto list for processing
- 		    zip = new JSZip(data, {base64:true});
- 		    zipFileName = filename;
-		    zipFileNames = [];
-		    for(var zipfileName in zip.files)
-		        zipFileNames.push(zipfileName);	        
-		    // Start sending the files
-		    {!name}Next('{!state}');
+			zip = new JSZip(data, {base64:true});
+			zipFileName = filename;
+			zipFileNames = [];
+			for(var zipfileName in zip.files)
+				zipFileNames.push(zipfileName);	        
+			// Start sending the files
+			{!name}Next('{!state}');
 		}
 		                     
 		// Function to be called to unzip the next file and call back via the 'oncomplete' handler	    
-	    function {!name}Next(state)
-	    {                 
-	        var fileName = null;
-	        var file = null;
-	        while(true)
-	        {
-	        	// Pop the next file
-	            file = null;
-	            fileName = zipFileNames.pop();
-	            if(fileName == null)
-	                break;
-	            file = zip.files[fileName];
-	            // Only break for files, skip over folder entries
-	            if(file.data!=null && file.data.length>0)
-	                break;
-	        }
-	        // File to send or done?
-	        var more = file!=null ? true : false;
-	        var path = more ? fileName : null;
-	        var data = more ? file.data : null;
-	        var filename = zipFileName;
-	        eval('{!oncomplete}');
-	    }           
+		function {!name}Next(state)
+		{                 
+			var fileName = null;
+			var file = null;
+			while(true)
+			{
+				// Pop the next file
+				file = null;
+				fileName = zipFileNames.pop();
+				if(fileName == null)
+					break;
+				file = zip.files[fileName];
+				// Only break for files, skip over folder entries
+				if(file.data!=null && file.data.length>0)
+					break;
+			}
+			// File to send or done?
+			var more = file!=null ? true : false;
+			var path = more ? fileName : null;
+			var data = more ? file.data : null;
+			var filename = zipFileName;
+			eval('{!oncomplete}');
+		}           
 	</script>
 </apex:component>
