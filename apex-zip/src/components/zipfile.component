@@ -25,20 +25,25 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/ 
  -->
-<apex:component >
-	<apex:attribute name="name" type="string" description="Name of the Javascript function generated to unzip files"/>
-	<apex:attribute name="state" type="string" description="Value passed to the JavaScript Remoting action calls as each file is unzipped."/>
-	<apex:attribute name="getzipfileentry" type="string" description="Name of a JavaScript Remoting action retrieve a given zip file entry."/>
-	<apex:attribute name="oncomplete" type="string" description="JavaScript executed when the zip file generation is complete."/>
-	<c:zip name="zip{!name}" oncomplete="{!oncomplete}">		
-		<apex:componentBody /> <!--  Output children, typically <c:zipEntry> components -->
+<apex:component>
+	<apex:attribute name="name" type="string"
+		description="Name of the Javascript function generated to unzip files" />
+	<apex:attribute name="state" type="string"
+		description="Value passed to the JavaScript Remoting action calls as each file is unzipped." />
+	<apex:attribute name="getzipfileentry" type="string"
+		description="Name of a JavaScript Remoting action retrieve a given zip file entry." />
+	<apex:attribute name="oncomplete" type="string"
+		description="JavaScript executed when the zip file generation is complete." />
+	<c:zip name="zip{!name}" oncomplete="{!oncomplete}">
+		<apex:componentBody />
+		<!--  Output children, typically <c:zipEntry> components -->
 	</c:zip>
-	<script>
+	<script type="text/javascript">
 		// Component client side state 
 		// TODO: Need to scope these global var's by component name
-	    var zipFileNames = null;
-	    var zipFileEntry = null;
-	
+		var zipFileNames = null;
+		var zipFileEntry = null;
+
 		// Method called by page to either make a request for the next zip entry file data or if none remain call oncomplete
 		function {!Name}Generate()
 		{
@@ -46,56 +51,56 @@
 			if(zipFileNames==null)
 			{
 				zipFileNames = [];
-			    for(var zipfileName in zipFile.files)
-			        zipFileNames.push(zipfileName);
+				for(var zipfileName in zipFile.files)
+					zipFileNames.push(zipfileName);
 			}
 			// Find next zip file to request data for?  
-	        var file = null;
-	        var fileName = null;
-	        while(true)
-	        {
-	        	file = null;
-	        	fileName = zipFileNames.pop()
-            	if(fileName != null)
-            	{
-	            	file = zipFile.files[fileName];
-	            	if(file.options.dir)
-	            		continue;
-	            }
-	            break;
-	        }
-	        // File to request or all done?
-	        var more = file!=null ? true : false;
-	        if(more)
-	        {
+			var file = null;
+			var fileName = null;
+			while(true)
+			{
+				file = null;
+				fileName = zipFileNames.pop()
+				if(fileName != null)
+				{
+					file = zipFile.files[fileName];
+					if(file.options.dir)
+						continue;
+				}
+				break;
+			}
+			// File to request or all done?
+			var more = file!=null ? true : false;
+			if(more)
+			{
 				// Call JavaScript Remoting to request file data for given file
 				zipFileEntry = file;
 				getZipFileEntry(fileName, '{!state}'); // TODO: Make state read/write				
-	        }
-	        else
-	        {
+			}
+			else
+			{
 				// Call generate 
 				zip{!name}Generate();
-	        }
+			}
 		}
-		
+	
 		// Function makes remote call to server to request file data on success calls the generate function above to proceed to next file or complete
 		function getZipFileEntry(path, state) {
-		    Visualforce.remoting.Manager.invokeAction(
-		        '{!getzipfileentry}', 
-		        path, state,
-		        function(result, event){
-		            if (event.status) {
-		            	zipFileEntry.data = result;
-		                {!name}Generate();
-		            } else if (event.type === 'exception') {
-		            	alert(event.message);
-		            } else {
-		            	alert(event.message);
-		            }
-		        }, 
-		        {escape: true}
-		    );
+			Visualforce.remoting.Manager.invokeAction(
+				'{!getzipfileentry}', 
+				path, state,
+				function(result, event){
+					if (event.status) {
+						zipFileEntry.data = result;
+						{!name}Generate();
+					} else if (event.type === 'exception') {
+						alert(event.message);
+					} else {
+						alert(event.message);
+					}
+				}, 
+				{escape: true}
+			);
 		}
 	</script>
 </apex:component>
