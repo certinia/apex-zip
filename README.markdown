@@ -9,9 +9,8 @@ I recently found a number of developers asking questions about Zip file handling
 Strategies
 ----------
 
-I've started to describe the strategies demonstrated in this repo in a series of blogs, the first of which is [here](http://andrewfawcett.wordpress.com/2012/11/04/handling-office-files-and-zip-files-in-apex-part-1/).
+I have describe the strategies, components and examples demonstrated in this repo in a series of blogs, the first of which is [here](http://andrewfawcett.wordpress.com/2012/11/04/handling-office-files-and-zip-files-in-apex-part-1/). The second and final part of the series can be found [here](http://andrewfawcett.wordpress.com/2012/12/09/handling-office-files-and-zip-files-in-apex-part-2/). Enjoy!
 
-**Update 1st Dec:** I have started to commit WIP versions of zipfile and unzipfile components. I will follow up with a blog entry describing more about this in due course. In the meantime the best way to understand them is to review the zipdemo and unzipdemo pages and associated controllers.
 
 About the Author
 ----------------
