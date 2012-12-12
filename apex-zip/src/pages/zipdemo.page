@@ -30,7 +30,7 @@
 		<apex:actionFunction name="receiveZip" action="{!receiveZipFile}" rerender="form">
 			<apex:param name="zipdata" assignTo="{!zipFileData}" value="0"/>
 		</apex:actionFunction>
-		<apex:pageblock title="Select a Zip File">
+		<apex:pageblock title="Generating Zip File">
 			<apex:pageMessages />
 			<c:zipfile name="someZipfile" state="{!ZipFile__c.Id}" oncomplete="receiveZip(data);"
 				getzipfileentry="{!$RemoteAction.ZipDemoController.getZipFileEntry}">

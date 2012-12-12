@@ -78,7 +78,7 @@
 			// File to send or done?
 			var more = file!=null ? true : false;
 			var path = more ? fileName : null;
-			var data = more ? file.data : null;
+			var data = more ? JSZipBase64.encode(file.data) : null;
 			var filename = zipFileName;
 			eval('{!oncomplete}');
 		}           

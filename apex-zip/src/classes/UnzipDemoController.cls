@@ -61,7 +61,7 @@ public with sharing class UnzipDemoController
 		
 		// Attach unzipped file
 		Attachment attachment = new Attachment();
-		attachment.Body = Blob.valueOf(data);
+		attachment.Body = EncodingUtil.base64Decode(data);
 		attachment.Name = path;
 		attachment.ParentId = state;
 		insert attachment;
