@@ -1,6 +1,8 @@
 Apex Zip Support
 ================
 
+**[Deploy to Salesforce](https://githubsfdeploy.herokuapp.com/app/githubdeploy/financialforcedev/apex-zip)**
+
 Background
 -----------
 
